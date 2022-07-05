@@ -4,7 +4,11 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
+
+var blinking = lipgloss.NewStyle().Blink(true)
+const block = "\u2588"
 
 type InputBar struct {
   Prompt string
@@ -49,6 +53,6 @@ func (m InputBar) display() string {
 }
 
 func (m InputBar) View() string {
-  return m.display()
+  return m.display() + blinking.Render(block)
 }
 

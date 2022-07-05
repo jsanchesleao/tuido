@@ -25,6 +25,10 @@ type SelectPrevMsg struct {}
 type AddMsg struct {
   Text string
 }
+type CompleteMsg struct {}
+type RevertMsg struct {}
+type ToggleCompletionMsg struct {}
+type ClearCompletedMsg struct {}
 
 func NewTodoList() TodoList {
 	return TodoList{Items: make([]TodoItem, 0)}
@@ -70,8 +74,22 @@ func (list *TodoList) selectPrev() {
 
 }
 
-func (item *TodoItem) complete() {
-	item.Done = true
+func (list *TodoList) completeSelected() {
+  if item := list.GetSelected(); item != nil {
+    item.Done = true
+  }
+}
+
+func (list *TodoList) revertSelected() {
+  if item := list.GetSelected(); item != nil {
+    item.Done = false
+  }
+}
+
+func (list *TodoList) toggleCompletionSelected() {
+  if item := list.GetSelected(); item != nil {
+    item.Done = !item.Done
+  }
 }
 
 func (m TodoList) Init() tea.Cmd {
@@ -90,6 +108,14 @@ func (m TodoList) Update(msg tea.Msg) (TodoList, tea.Cmd) {
       m.selectNext()
     case SelectPrevMsg:
       m.selectPrev()
+    case CompleteMsg:
+      m.completeSelected()
+    case RevertMsg:
+      m.revertSelected()
+    case ToggleCompletionMsg:
+      m.toggleCompletionSelected()
+    case ClearCompletedMsg:
+      m.clearCompleted()
   }
 	return m, nil
 }
