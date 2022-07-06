@@ -66,6 +66,12 @@ func (m mainModel) updateListMode(msg tea.Msg) (mainModel, tea.Cmd) {
     case "j":
       m.todolist, cmd = m.todolist.Update(todolist.SelectNextMsg{})
       cmds = append(cmds, cmd)
+    case "K":
+      m.todolist, cmd = m.todolist.Update(todolist.MoveUpMsg{})
+      cmds = append(cmds, cmd)
+    case "J":
+      m.todolist, cmd = m.todolist.Update(todolist.MoveDownMsg{})
+      cmds = append(cmds, cmd)
     case " ":
       m.todolist, cmd = m.todolist.Update(todolist.ToggleCompletionMsg{})
       cmds = append(cmds, cmd)

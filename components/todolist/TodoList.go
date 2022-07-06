@@ -29,6 +29,8 @@ type CompleteMsg struct {}
 type RevertMsg struct {}
 type ToggleCompletionMsg struct {}
 type ClearCompletedMsg struct {}
+type MoveUpMsg struct {}
+type MoveDownMsg struct {}
 
 func NewTodoList() TodoList {
 	return TodoList{Items: make([]TodoItem, 0)}
@@ -92,6 +94,28 @@ func (list *TodoList) toggleCompletionSelected() {
   }
 }
 
+func (list *TodoList) moveUp() {
+  if !list.hasFocus || list.selected <= 0 {
+    return
+  }
+  current := *list.GetSelected()
+  list.selectPrev()
+  prev := *list.GetSelected()
+  list.Items[list.selected] = current
+  list.Items[list.selected + 1] = prev
+}
+
+func (list *TodoList) moveDown() {
+  if !list.hasFocus || list.selected >= len(list.Items) - 1 {
+    return
+  }
+  current := *list.GetSelected()
+  list.selectNext()
+  prev := *list.GetSelected()
+  list.Items[list.selected] = current
+  list.Items[list.selected - 1] = prev
+}
+
 func (m TodoList) Init() tea.Cmd {
 	return nil
 }
@@ -116,6 +140,10 @@ func (m TodoList) Update(msg tea.Msg) (TodoList, tea.Cmd) {
       m.toggleCompletionSelected()
     case ClearCompletedMsg:
       m.clearCompleted()
+    case MoveUpMsg:
+      m.moveUp()
+    case MoveDownMsg:
+      m.moveDown()
   }
 	return m, nil
 }

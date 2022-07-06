@@ -1,6 +1,9 @@
 package todolist
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestInitList(t *testing.T) {
 	list := NewTodoList()
@@ -35,7 +38,7 @@ func TestCompleteAndClean(t *testing.T) {
 	list.add("Second")
 	list.add("Third")
 
-	list.Items[1].complete()
+	list.Items[1].Done = true
 
 	if !list.Items[1].Done {
 		t.Fatal("Item indexed [1] should be Done")
@@ -46,7 +49,36 @@ func TestCompleteAndClean(t *testing.T) {
 	if len(list.Items) != 2 {
 		t.Fatalf("Expected list to clear to size 2, but was %d", len(list.Items))
 	}
+}
 
+func TestMoveItem(t *testing.T) {
+  list := NewTodoList()
+  list.add("First")
+	list.add("Second")
+	list.add("Third")
+
+  list.focus()
+  list.selectNext()
+  list.moveUp()
+
+  if list.GetSelected().Text != "Second" {
+    t.Fatalf("Expected selection to stay on the same item, but it was in %s", list.GetSelected().Text)
+  }
+
+  list.selectNext()
+  if list.GetSelected().Text != "First" {
+    t.Fatalf("Expected item with Text First to be in the second position, but the item was %s", list.GetSelected().Text)
+  }
+
+  list.moveDown()
+  if list.GetSelected().Text != "First" {
+    t.Fatalf("Expected item with Text First to be in the third position, but the item was %s", list.GetSelected().Text)
+  }
+
+  list.selectPrev()
+  if list.GetSelected().Text != "Third" {
+    t.Fatalf("Expected item with Text Third to be in the second position, but the item was %s", list.GetSelected().Text)
+  }
 }
 
 func TestUpdate(t *testing.T) {

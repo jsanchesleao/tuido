@@ -1,13 +1,16 @@
 package inputbar
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestInputBarSetup(t *testing.T) {
   bar := NewInputBar("Prompt", "text")
 
   view := bar.View()
   expected := "Prompt: text"
-  if view != expected {
+  if !strings.HasPrefix(view, expected) {
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 
@@ -22,7 +25,7 @@ func TextInsertKeys(t *testing.T) {
 
   view := bar.View()
   expected := "Prompt: text! X"
-  if view != expected {
+  if !strings.HasPrefix(view, expected) {
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 }
@@ -33,7 +36,7 @@ func TestBackspace(t *testing.T) {
 
   view := bar.View()
   expected := "Prompt: tex"
-  if view != expected {
+  if !strings.HasPrefix(view, expected){
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 
@@ -45,7 +48,7 @@ func TestBackspace(t *testing.T) {
 
   view = bar.View()
   expected = "Prompt: "
-  if view != expected {
+  if !strings.HasPrefix(view, expected) {
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 }
@@ -57,7 +60,7 @@ func TestPromptChange(t *testing.T) {
 
   view := bar.View()
   expected := "$: text"
-  if view != expected {
+  if !strings.HasPrefix(view, expected) {
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 }
@@ -68,7 +71,7 @@ func TestClearMsg(t *testing.T) {
 
   view := bar.View()
   expected := "Prompt: "
-  if view != expected {
+  if !strings.HasPrefix(view, expected) {
     t.Fatalf("Expected view to render %q but it was %q", expected, view)
   }
 }
